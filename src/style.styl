@@ -1,0 +1,55 @@
+vendor-prefixes ?= webkit moz ms official
+@import 'nib'
+
+global-reset();
+
+.clear
+    clearfix()
+
+*
+    box-sizing: border-box;
+
+input[type="submit"], input[type="button"], button
+	cursor pointer
+	text-transform capitalize
+html
+    padding 0
+    margin 0
+body
+    padding 100px
+    margin 0
+    background black
+    font-size 18px
+    color white
+    text-align center
+    font-family monospace
+    text-align left
+    line-height 28px
+p
+    margin 0 20px
+h1
+    font-size 4em
+    margin-bottom 2em
+
+    span
+        color #444
+        font-size 0.5em
+
+a, a:visited, a:hover
+    color #fff
+
+a:hover
+    text-decoration none
+
+
+@media (max-width: 720px)
+    body
+        font-size 14px
+        padding 20px 10px
+
+    h1
+        margin-bottom 10px
+        font-size 2em
+        line-height 1em
+    p
+        margin 0px

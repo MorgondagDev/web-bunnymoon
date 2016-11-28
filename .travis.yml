@@ -1,0 +1,26 @@
+sudo: false
+language: node_js
+node_js:
+- 5.4.1
+before_script:
+- npm i
+script:
+- npm test
+- npm run build
+cache:
+  bundler: true
+  directories:
+  - node_modules
+before_deploy:
+  - pip install --user awscli
+  - ~/.local/bin/aws configure set preview.cloudfront true
+deploy:
+  provider: script
+  script: ~/.local/bin/aws s3 sync dist $BUCKET $REGION --delete
+  skip_cleanup: true
+  on:
+    branch: master
+after_deploy: ~/.local/bin/aws cloudfront create-invalidation --distribution-id $DIST_ID --paths '/*'
+notifications:
+  slack:
+    secure: iNqbvN+/DFVoj/6SDSbJQsD4iSV37Ulc30wCPh1yZa6cZiJ67O0e7U8PbodSFDSNshfvIQEnGYaFQDCDyYyU+EGcUtS3A7iLxeTKf887gdKRE4CjgjF+zzJLPb56udtsyyH5K7TVxpMCQBerCrPYSdETShtXg06YEic4Q/RvpVX6s+ogIOHlCgc/tlHUFcAd26uwBKnwoscSBxf0xzF8SPnGj8EcTZRKzji1MuFpx6a8Iru53w2A1fDvdSyL7QKAtI6LRqDGLJkCjcO+hjWRbsbMqFeJKbMBqqQFjQwazCZXEcfLracAG8OqHVtIuXrgBanaaPG0d/WSvuhVC3nUuGTkMndL7gxgFQOKs08rsShoF+u1MLajOJNh+8M/GRHC0yTtoBfgwmnWxAx9v1CmlEj6Ftk8Nk5EiCgnfJs0hNr6nM1vde24bjjGVMNB3r16d6kaSEsjcTJmagG1mlRLGn723BjLCD4+ifKMiHacCO6pdg8kzOqqexL7I5rmOTctrh5ykZysnIFHpHbyAVizkvDn6D8GFkZyYz2U3cHLUgWh5ZkT67Ql5y0TybTOW/QFOmv+Se3+prro9rEYXGHlGA1FNnLEBrYGGIfHXXmzFeTKq40SHM6oy516tdgKnnjQvj7SUQR4sXpMxOI/OSV7Obq/jSgCBSTyZacW5hSfHCA=
